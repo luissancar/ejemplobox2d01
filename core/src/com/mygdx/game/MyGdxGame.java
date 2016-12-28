@@ -13,11 +13,4 @@ public class MyGdxGame extends Game {
 		setScreen(new Box2DScreen(this));
 	}
 
-	@Override
-	public void render () {
-	}
-	
-	@Override
-	public void dispose () {
-	}
 }

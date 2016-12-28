@@ -5,7 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -17,6 +21,8 @@ public class Box2DScreen extends BaseScreen {
     private World world;
     private Box2DDebugRenderer renderer;
     private OrthographicCamera camera; //cámara 2d;
+    private Body objeto01Body;  // entedad de nuestro mundo, posición, velocidad, no tiene forma
+    private Fixture objeto01Fixture; // forma del body
 
 
 
@@ -32,13 +38,28 @@ public class Box2DScreen extends BaseScreen {
 
         //You generally will not use this in a released version of your game, but for testing purposes we will set it up now like so:
         renderer=new Box2DDebugRenderer();
-        camera=new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        camera=new OrthographicCamera(32,18);
+        BodyDef objeto01Def=createObjeto01Def();
+        objeto01Body=world.createBody(objeto01Def);
+
+        PolygonShape objeto01Shape=new PolygonShape();
+        objeto01Shape.setAsBox(1,1); // en metros
+        objeto01Fixture=objeto01Body.createFixture(objeto01Shape,1); //1= densidad
+        objeto01Shape.dispose(); // no lo necesitamos
 
 
+
+    }
+    private BodyDef createObjeto01Def() {
+        BodyDef defCuerpo=new BodyDef();
+        defCuerpo.position.set(0,10);
+        defCuerpo.type= BodyDef.BodyType.DynamicBody;
+        return defCuerpo;
     }
 
     @Override
     public void dispose() {
+        world.destroyBody(objeto01Body);
         world.dispose();
         renderer.dispose();
 
